@@ -34,6 +34,8 @@ String countdownGo = "Countdown...";
 String launchInit = "LAUNCH INITIATED";
 String relayClosed = "GO LAUNCH";
 String getMoney = "YEET";
+String launchTime;
+String instructions = "To finish the launch, enter 'S' to end. (CASE SENSISTIVE)";
 
 String initPassword = "f345";
 
@@ -46,6 +48,28 @@ pinMode(unlockPin,OUTPUT);
 pinMode(relayPin,OUTPUT);
 Serial.println(msg1);
 Serial.println();
+
+digitalWrite(lightPinAlert,HIGH);
+digitalWrite(unlockPin,HIGH);
+digitalWrite(pinSuccess,HIGH);
+  for(j = 1; j<=100; j = j + 1) {
+  digitalWrite(buzzPin,HIGH);
+  delay(wait1);
+  digitalWrite(buzzPin,LOW);
+  delay(wait1);
+  }
+  for(j = 1; j<=100; j = j + 1) {
+    digitalWrite(buzzPin,HIGH);
+    digitalWrite(lightPinAlert,HIGH);
+    delay(wait2);
+    digitalWrite(buzzPin,LOW);
+    digitalWrite(lightPinAlert,LOW);
+    delay(wait2);
+   }
+digitalWrite(lightPinAlert,LOW);
+digitalWrite(unlockPin,LOW);
+digitalWrite(pinSuccess,LOW);
+
 }
 
 void loop() {
@@ -98,6 +122,11 @@ launch = Serial.readString();
 if(launch == "Y" || launch == "y") {
 
 // Launch Initiated
+digitalWrite(pinSuccess,HIGH);
+delay(wait3);
+digitalWrite(pinSuccess,LOW);
+delay(wait3);
+
 Serial.println(countdownInit);
 delay(transition);
 Serial.println();
@@ -131,7 +160,7 @@ delay(transition);
     delay(teeMinus);
 }
 
-// Launch Trigger
+// Launch Trigger 
   Serial.println(launchInit);
   digitalWrite(pinSuccess,HIGH);
   delay(transition);
@@ -143,18 +172,24 @@ delay(transition);
   delay(transition);
   Serial.println(getMoney);
   digitalWrite(relayPin,HIGH);
-  delay(unlockTime);
+  Serial.println();
+  Serial.println(instructions);
+
+launchTime = Serial.readString();
+while(Serial.readString() != "S") {
+   digitalWrite(unlockPin,HIGH);
+   digitalWrite(relayPin,HIGH);
+}
   digitalWrite(unlockPin,LOW);
   digitalWrite(relayPin,LOW);
-  delay(launchEnd);
-  Serial.println(success);
-      for(j = 1; j <= 1; j = j + 1){
-      digitalWrite(pinSuccess,HIGH);
-      delay(wait3);
-      digitalWrite(pinSuccess,LOW);
-      delay(wait3);
+  delay(teeMinus);
+  Serial.println(success);  
+  digitalWrite(pinSuccess,HIGH);
+  delay(wait3);
+  digitalWrite(pinSuccess,LOW);
+  delay(wait3);
+
 // Launch End
-  }
   
 }
 //Launch abort
